@@ -627,7 +627,7 @@ class Runner
 
                 $this->reporter->printReport('full');
 
-                echo '<ENTER> to recheck, [s] to skip or [q] to quit : ';
+                echo '<ENTER> to recheck, [s] to skip'.($this->config->editorPath ? ', [o] to open in editor' : null).' or [q] to quit : ';
                 $input = fgets(STDIN);
                 $input = trim($input);
 
@@ -636,6 +636,10 @@ class Runner
                     break(2);
                 case 'q':
                     throw new DeepExitException('', 0);
+                case 'o':
+                    if ($this->config->editorPath) {
+                        exec($this->config->editorPath.' '.$file->path);
+                    }
                 default:
                     // Repopulate the sniffs because some of them save their state
                     // and only clear it when the file changes, but we are rechecking

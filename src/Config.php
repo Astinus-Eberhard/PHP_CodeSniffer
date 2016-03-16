@@ -115,6 +115,7 @@ class Config
         'tabWidth'        => null,
         'encoding'        => null,
         'extensions'      => null,
+        'editorPath'      => null,
         'sniffs'          => null,
         'exclude'         => null,
         'ignored'         => null,
@@ -485,6 +486,7 @@ class Config
         $this->reportFile      = null;
         $this->generator       = null;
         $this->filter          = null;
+        $this->editorPath      = null;
         $this->bootstrap       = [];
         $this->basepath        = null;
         $this->reports         = ['full' => null];
@@ -501,6 +503,11 @@ class Config
         $standard = self::getConfigData('default_standard');
         if ($standard !== null) {
             $this->standards = explode(',', $standard);
+        }
+
+        $editorPath = self::getConfigData('editorPath');
+        if ($editorPath !== null) {
+            $this->editorPath = $editorPath;
         }
 
         $reportFormat = self::getConfigData('report_format');
@@ -839,6 +846,9 @@ class Config
 
                 $this->sniffs = $sniffs;
                 self::$overriddenDefaults['sniffs'] = true;
+            } else if (substr($arg, 0, 12) === 'editor-path=') {
+                $this->editorPath = substr($arg, 12);
+                self::$overriddenDefaults['editorPath'] = true;
             } else if (substr($arg, 0, 8) === 'exclude=') {
                 if (isset(self::$overriddenDefaults['exclude']) === true) {
                     break;
@@ -1363,7 +1373,7 @@ class Config
         echo '  [--report-width=<reportWidth>] [--basepath=<basepath>] [--bootstrap=<bootstrap>]'.PHP_EOL;
         echo '  [--severity=<severity>] [--error-severity=<severity>] [--warning-severity=<severity>]'.PHP_EOL;
         echo '  [--runtime-set key value] [--config-set key value] [--config-delete key] [--config-show]'.PHP_EOL;
-        echo '  [--standard=<standard>] [--sniffs=<sniffs>] [--exclude=<sniffs>]'.PHP_EOL;
+        echo '  [--standard=<standard>] [--sniffs=<sniffs>] [--exclude=<sniffs>] [--editor-path=<path>]'.PHP_EOL;
         echo '  [--encoding=<encoding>] [--parallel=<processes>] [--generator=<generator>]'.PHP_EOL;
         echo '  [--extensions=<extensions>] [--ignore=<patterns>] [--ignore-annotations]'.PHP_EOL;
         echo '  [--stdin-path=<stdinPath>] [--file-list=<fileList>] <file> - ...'.PHP_EOL;
