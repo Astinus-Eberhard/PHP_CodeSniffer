@@ -97,9 +97,9 @@ class Runner
         // so we hard-code the full report here and when outputting.
         // We also ensure parallel processing is off because we need to do one file at a time.
         if ($this->config->interactive === true) {
-            $this->config->reports     = array('full' => null);
-            $this->config->parallel    = 1;
-            $this->config->showProcess = false;
+            $this->config->reports      = array('full' => null);
+            $this->config->parallel     = 1;
+            $this->config->showProgress = false;
         }
 
         // Disable caching if we are processing STDIN as we can't be 100%
@@ -604,7 +604,7 @@ class Runner
 
                 $this->reporter->printReport('full');
 
-                echo '<ENTER> to recheck, [s] to skip or [q] to quit : ';
+                echo '<ENTER> to recheck, [s] to skip'.($this->config->editorPath ? ', [o] to open in editor' : null).' or [q] to quit : ';
                 $input = fgets(STDIN);
                 $input = trim($input);
 
@@ -613,6 +613,10 @@ class Runner
                     break(2);
                 case 'q':
                     exit(0);
+                case 'o':
+                    if ($this->config->editorPath) {
+                        exec($this->config->editorPath.' '.$file->path);
+                    }
                 default:
                     // Repopulate the sniffs because some of them save their state
                     // and only clear it when the file changes, but we are rechecking
