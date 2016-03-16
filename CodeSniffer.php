@@ -145,7 +145,7 @@ class PHP_CodeSniffer
      * @var array
      */
     private $_tokenListeners = array();
-    
+
     /**
      * The editor path / command
      *
@@ -404,6 +404,7 @@ class PHP_CodeSniffer
     public function getEditorPath()
     {
         return $this->editorPath;
+
     }//end getEditorPath()
 
 
@@ -417,6 +418,7 @@ class PHP_CodeSniffer
     public function setEditorPath($path)
     {
         $this->editorPath = $path;
+
     }//end setEditorPath()
 
 
@@ -428,6 +430,7 @@ class PHP_CodeSniffer
     public function isEditorPathSet()
     {
         return false === empty($this->editorPath);
+
     }//end isEditorPathSet()
 
 
@@ -1856,7 +1859,7 @@ class PHP_CodeSniffer
             $reportData  = $this->reporting->prepareFileReport($phpcsFile);
             $reportClass->generateFileReport($reportData, $phpcsFile, $cliValues['showSources'], $cliValues['reportWidth']);
 
-            if ($this->isEditorPathSet()) {
+            if ($this->isEditorPathSet() === true) {
                 echo '<ENTER> to recheck, [s] to skip, [o] to open in editor or [q] to quit : ';
             } else {
                 echo '<ENTER> to recheck, [s] to skip or [q] to quit : ';
@@ -1872,7 +1875,7 @@ class PHP_CodeSniffer
                 exit(0);
                 break;
             case 'o':
-                if ($this->isEditorPathSet()) {
+                if ($this->isEditorPathSet() === true) {
                     exec($this->getEditorPath().' '.$file);
                 }
                 break;
