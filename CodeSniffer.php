@@ -145,6 +145,13 @@ class PHP_CodeSniffer
      * @var array
      */
     private $_tokenListeners = array();
+    
+    /**
+     * The editor path / command
+     *
+     * @var string|null
+     */
+    protected $editorPath = null;
 
     /**
      * An array of rules from the ruleset.xml file.
@@ -390,7 +397,18 @@ class PHP_CodeSniffer
 
 
     /**
-     * Sets the interactive flag.
+     * Sets the editor path / command
+     *
+     * @return string|null
+     */
+    public function getEditorPath()
+    {
+        return $this->editorPath;
+    }//end getEditorPath()
+
+
+    /**
+     * Sets the editor path / command
      *
      * @param string $path During interactive session will use this to open invalid files.
      *
@@ -398,11 +416,19 @@ class PHP_CodeSniffer
      */
     public function setEditorPath($path)
     {
-        if (defined('PHP_CODESNIFFER_EDITOR_PATH') === false) {
-            define('PHP_CODESNIFFER_EDITOR_PATH', $path);
-        }
-
+        $this->editorPath = $path;
     }//end setEditorPath()
+
+
+    /**
+     * Returns true if the editor path / command was set
+     *
+     * @return boolean
+     */
+    public function isEditorPathSet()
+    {
+        return false === empty($this->editorPath);
+    }//end isEditorPathSet()
 
 
     /**
@@ -1807,10 +1833,10 @@ class PHP_CodeSniffer
             $reportData  = $this->reporting->prepareFileReport($phpcsFile);
             $reportClass->generateFileReport($reportData, $phpcsFile, $cliValues['showSources'], $cliValues['reportWidth']);
 
-            if (empty(PHP_CODESNIFFER_EDITOR_PATH) === true) {
-                echo '<ENTER> to recheck, [s] to skip or [q] to quit : ';
-            } else {
+            if ($this->isEditorPathSet()) {
                 echo '<ENTER> to recheck, [s] to skip, [o] to open in editor or [q] to quit : ';
+            } else {
+                echo '<ENTER> to recheck, [s] to skip or [q] to quit : ';
             }
 
             $input = fgets(STDIN);
@@ -1823,8 +1849,8 @@ class PHP_CodeSniffer
                 exit(0);
                 break;
             case 'o':
-                if (false === empty(PHP_CODESNIFFER_EDITOR_PATH)) {
-                    exec(PHP_CODESNIFFER_EDITOR_PATH.' '.$file);
+                if ($this->isEditorPathSet()) {
+                    exec($this->getEditorPath().' '.$file);
                 }
                 break;
             default:
