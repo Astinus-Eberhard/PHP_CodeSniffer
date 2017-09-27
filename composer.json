@@ -1,5 +1,5 @@
 {
-    "name": "squizlabs/php_codesniffer",
+    "name": "astinus/php_codesniffer",
     "description": "PHP_CodeSniffer tokenizes PHP, JavaScript and CSS files and detects violations of a defined set of coding standards.",
     "type": "library",
     "keywords": [
@@ -12,6 +12,10 @@
         {
             "name": "Greg Sherwood",
             "role": "lead"
+        },
+        {
+            "name": "Piotr Makowski",
+            "role": "maintainer"
         }
     ],
     "support": {
@@ -23,6 +27,9 @@
         "branch-alias": {
             "dev-master": "3.x-dev"
         }
+    },
+    "replace": {
+        "squizlabs/php_codesniffer": "self.version"
     },
     "require": {
         "php": ">=5.4.0",
